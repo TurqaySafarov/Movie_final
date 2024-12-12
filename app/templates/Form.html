@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {%load index%}
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>movie</title>
+        <link rel="stylesheet" href="/static/index.css" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="icon"
+            href="https://assets.nflxext.com/us/ffe/siteui/common/icons/nficon2016.png"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/collection/components/icon/icon.min.css"
+        />
+        <!-- Ionicons JS -->
+        <script
+            type="module"
+            src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+        ></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <!-- header start -->
+            <header>
+                <!-- normal -->
+                <div class="section_container header_container">
+                    <a class="logo">
+                        <img src="/static/images/icons/Component 1.png" alt="logo" />
+                    </a>
+
+                    <nav class="header--nav">
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/">Discover</a></li>
+                            <li><a href="#">Movie Release</a></li>
+                            <li><a href="/form">Forum</a></li>
+                            <li><a href="#">About</a></li>
+                        </ul>
+                    </nav>
+
+                    <div class="notif">
+                        <div class="search_icon">
+                            <img
+                                class="search_icon"
+                                src="/static/images/icons/search_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg"
+                                alt="search"
+                            />
+                            <div class="search_input">
+                                <input type="text" />
+                            </div>
+                        </div>
+
+                        {%if request.session.user_id%}
+                        <div class="message_box">
+                         <img src="/static/images/icons/bell.svg" />
+                       </div>
+             
+                       <div class="profil">
+                         <img src="/static/images/icons/Image.svg" alt="profil image" />
+                         
+                         <a href="/logout" style="color:white;margin-left:15px">Logout</a>
+                       </div>
+                       {%else%}
+                       <div class="notif">
+                        
+                         <!-- signup btn -->
+                         <a class="text_white" href="/signup">
+                         <button class="transparent_button" style="color: white;">
+                          Sign up
+                         </button>
+                       </a>
+             
+                         <!-- login btn -->
+                         <a class="text_white" href="/login" style="color: white;">
+                         <button class="play_button rounded-base flex_center" style="color: white;">
+                           Login
+                         </button>
+                       </a>
+                       </div>
+                       {%endif%}
+                        <nav class="burger">
+                            <ul>
+                                <li><a href="/">Home</a></li>
+                                <li><a href="/">Discover</a></li>
+                                <li><a href="#">Movie Release</a></li>
+                                <li><a href="/form">Forum</a></li>
+                                <li><a href="#">About</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <!-- header end -->
+
+            <!-- main start -->
+            <main>
+                <!-- header section 1  start-->
+                <section id="form_hero_section">
+                    <div class="details_container form__movie_container section_container">
+                        <div class="movie--details--wrapper">
+                            <div class="movie-details max-w-2xl">
+                                <div>
+                                    <h2 class="movie__title">Become A Movie Influencer</h2>
+                                    <span
+                                        >Share your though about movie to people and become an
+                                        influencer</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!--  section 1  end-->
+
+                <!--  section 2- Movie Topics  start-->
+                <sectin>
+                    <div class="section_container">
+                        <div class="movies_header">
+                            <h4>🔥 Hot Movie Topics</h4>
+                            <div>
+                                <img
+                                    class="arrow_left"
+                                    src="/static/images/icons/Arrow Left.svg"
+                                    alt="arrow left icon"
+                                />
+                                <img
+                                    class="arrow_right"
+                                    src="/static/images/icons/arrow-right.svg"
+                                    alt="arrow right icon"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="films__container">
+                           
+                         {%for m in movies%}
+                         <a href="/form/discussions/{{m.film_link}}" style="color: white;">
+                            <div class="film-box">
+                                <!-- movie img -->
+                                <img src="{{m.film_poster.url}}" />
+                                <div class="film__context">
+                                    <!-- film name & category -->
+                                    <div class="movie_title__wrapper">
+                                        <h4>{{m.film_name}}</h4>
+                                        <div class="movie_category">
+                                            <img src="/static/images/icons/film.svg" />
+                                            <span>{{m.film_genre}} • {{m.film_category}}</span>
+                                        </div>
+                                    </div>
+    
+                                    <!-- reyting -->
+                                    <div class="reyting__container">
+                                        <img src="/static/images/icons/star.svg" />
+                                        <span class="reyting_count">{{m.film_imdb_rating}}</span>
+                                        <span>| {{m.review_count}} Reviews • {{m.discussion_count}} Discussion</span>
+                                    </div>
+                                </div>
+                            </div>
+                         </a>
+                        {%endfor%}
+                           
+                        </div>
+                    </div>
+                </sectin>
+                <!--  section 2  end-->
+
+                <!--  section 3- Movie Topics  start-->
+                <section>
+                    <div class="section_container popular_discussion__wrapper container_s">
+                        <div class="discussion_premiere_container">
+                            <!-- Popular Discussion container -->
+                            <div class="popular_discussion_container">
+                                <h2 class="container_title">⭐ Popular Discussion</h2>
+
+                                <!-- discussions -->
+                                <div class="discussion_container">
+                                    {%for d in discussions%}
+                                    <div class="discussion_item">
+                                        <!-- arrows -->
+                                        <div class="arrow_container">
+                                            <ion-icon
+                                                name="arrow-up-circle"
+                                                class="arrow-up-circle"
+                                            ></ion-icon>
+                                            <span class="discussion_count">{{d.discussion_replies}}</span>
+                                            <ion-icon
+                                                class="arrow-down-circle"
+                                                name="arrow-down-circle"
+                                            ></ion-icon>
+                                        </div>
+
+                                        <!-- texts and image -->
+                                        <div class="discussion--text_container">
+                                            <!-- discussions text -->
+                                            <div class="discussion--text">
+                                                <h3>
+                                                    <a href="/form/discussions/{{d.discussion_film.film_link}}/{{d.discussion_header}}">
+                                                        {{d.discussion_header}}</a
+                                                    >
+                                                </h3>
+                                                <p>
+                                                    {{d.discussion_content|decreaseword1}}
+                                                </p>
+
+                                                <!-- discussion reyting  container-->
+                                                <div class="discussion__reyting">
+                                                    <div class="tag_and_tiem">
+                                                        <span class="text-green">@{{d.user.username}}</span>
+                                                        <span class="text-gray">{{d.discussion_date|time_diff}}</span>
+                                                    </div>
+                                                    <div class="like_and_comment">
+                                                        <div>
+                                                            <img
+                                                            src="/static/images/icons/heartheart_discussion.svg"
+                                                            class="imglike"
+                                                             {%for u in user_likes%}  {%if d == u.discussion %}  data-liked="1" style="background-color: red;" {%else%} data-liked="0" {%endif%} {%endfor%} data-id="{{d.discussion_id}}"/>
+                                                            
+                                                            <span id="like-{{d.discussion_id}}">{{d.discussion_likes}}</span>
+                                                        </div>
+                                                        <div>
+                                                            <img
+                                                                src="/static/images/icons/chatcomment.svg"
+                                                            />
+                                                            <span>{{d.discussion_replies}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- discussions image -->
+                                            <div class="discussion--img">
+                                                <img
+                                                    src="{{d.discussion_film.film_poster.url}}"
+                                                    alt=""
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {%endfor%}
+
+                                
+                                </div>
+
+                                <div class="flex_center mt-30">
+                                    <button class="transparent_button button_xl">Show more</button>
+                                </div>
+                            </div>
+                            <!-- Premiere movie event -->
+                            
+                        </div>
+                        <!-- form popup cart  -->
+                        <div class="form_cart">
+                            <h2>Want to make a movie influence Profile?</h2>
+                            <a href="/signup" style="color: white;">
+                                <button class="play_button rounded-base flex_center text_white">
+                                    Create your profile now
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+                <!-- section 3 end -->
+            </main>
+            <!-- main end -->
+
+            <!-- footer start -->
+            <footer>
+                <div class="section_container footer_container">
+                    <div>
+                        <h4>
+                            Our platform is trusted by millions & features best updated movies all
+                            around the world.
+                        </h4>
+                        <div class="footer_nav_container">
+                            <nav>
+                                <!-- after iledə etmek olardı bu yolu seçdim -->
+                                <a href="/">Home</a>
+                                <span>/</span>
+                                <a href="/">Discover</a>
+                                <span>/</span>
+                                <a href="">Influence</a>
+                                <span>/</span>
+                                <a href="">Release</a>
+                            </nav>
+                            <div class="social_container">
+                                <img src="/static/images/social/icons8-instagram-30.png" />
+                                <img src="/static/images/social/icons8-facebook-30.png" />
+                                <img src="/static/images/social/icons8-twitter-squared-50.png" />
+                                <img src="/static/images/social/Google.svg" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="end">
+                        <div>
+                            <span>Privacy policy</span>
+                            <span>Term of service</span>
+                            <span>Language</span>
+                        </div>
+                        <div class="date">© 2023</div>
+                    </div>
+                </div>
+            </footer>
+            <!-- footer end -->
+        </div>
+
+        <!-- script -->
+        <script src="/static/app.js"></script>
+        <script>
+            const img = document.querySelectorAll('.imglike')
+            img.forEach(image=>{
+                image.addEventListener('click',async()=>{
+                    const id = image.getAttribute('data-id')
+                    const req = await fetch('/likeDiscussion/'+id)
+                    const res = req.json()
+                    res.then(dat=>{
+                        const like_con = document.getElementById('like-'+id)
+                        if(dat['status']=='success'){
+                            image.style = 'background-color:red;'
+                            like_con.innerText = parseInt(like_con.textContent)+1
+                        }
+                        else if(dat['status']='successdel'){
+                            image.style = 'background-color:none;'
+                            like_con.innerText = parseInt(like_con.textContent)-1 
+                        }
+                    })
+                })
+            }) 
+        </script>
+        <script src="/static/js/form.js"></script>
+    </body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>movie</title>
+        <link rel="stylesheet" href="/static/index.css" />
+        {%load index%}
+        <link
+            href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/collection/components/icon/icon.min.css"
+        />
+        <link
+            rel="icon"
+            href="https://assets.nflxext.com/us/ffe/siteui/common/icons/nficon2016.png"
+        />
+        <!-- Ionicons JS -->
+        <script
+            type="module"
+            src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+        ></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <!-- header start -->
+            <header>
+                <!-- normal -->
+                <div class="section_container header_container">
+                    <a class="logo form_logo">
+                        <img src="/static/images/icons/Component 1.png" alt="logo" />
+                    </a>
+                    <a class="mobil_left_icon">
+                        <img src="/static/images/icons/chevron-left.svg" />
+                    </a>
+
+                    <nav class="header--nav">
+                        <ul>
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">Discover</a></li>
+                            <li><a href="#">Movie Release</a></li>
+                            <li><a href="#">Forum</a></li>
+                            <li><a href="#">About</a></li>
+                        </ul>
+                    </nav>
+
+                    <div class="notif">
+                        <div class="search_icon">
+                            <img
+                                class="search_icon"
+                                src="/static/images/icons/search_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg"
+                                alt="search"
+                            />
+                            <div class="search_input">
+                                <input type="text" />
+                            </div>
+                        </div>
+
+                        {%if request.session.user_id%}
+                        <div class="message_box">
+                         <img src="/static/images/icons/bell.svg" />
+                       </div>
+             
+                       <div class="profil">
+                         <img src="/static/images/icons/Image.svg" alt="profil image" />
+                         
+                         <a href="/logout" style="color:white;margin-left:15px">Logout</a>
+                       </div>
+                       {%else%}
+                       <div class="notif">
+                        
+                         <!-- signup btn -->
+                         <a class="text_white" href="/signup">
+                         <button class="transparent_button" style="color: white;">
+                          Sign up
+                         </button>
+                       </a>
+             
+                         <!-- login btn -->
+                         <a class="text_white" href="/login" style="color: white;">
+                         <button class="play_button rounded-base flex_center" style="color: white;">
+                           Login
+                         </button>
+                       </a>
+                       </div>
+                       {%endif%}
+                        <nav class="burger">
+                            <ul>
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#">Discover</a></li>
+                                <li><a href="#">Movie Release</a></li>
+                                <li><a href="#">Forum</a></li>
+                                <li><a href="#">About</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <!-- header end -->
+
+            <!-- main start -->
+            <main>
+                <!-- section 1 start -->
+                <section>
+                    <div class="section_container form_discussion_container">
+                        <button class="transparent_button form_disc_button">Back</button>
+                        <!-- discussions -->
+                        <div class="discussion_container">
+                            <!-- current items -->
+                            <div class="discussion_item">
+                                <!-- arrows -->
+                                <div class="arrow_container">
+                                    <ion-icon
+                                        name="arrow-up-circle"
+                                        class="arrow-up-circle"
+                                    ></ion-icon>
+                                    <span class="discussion_count">{{discussion.discussion_likes}}</span>
+                                    <ion-icon
+                                        class="arrow-down-circle"
+                                        name="arrow-down-circle"
+                                    ></ion-icon>
+                                </div>
+
+                                <!-- texts and image -->
+                                <div class="discussion--text_container">
+                                    <!-- discussions text -->
+                                    <div class="discussion--text">
+                                        <h3>
+                                            {{discussion.discussion_header}}
+                                        </h3>
+                                        <p>
+                                            {{discussion.discussion_content}}
+                                        </p>
+
+                                        <!-- discussion reyting  container-->
+                                        <div class="discussion__reyting">
+                                            <div class="tag_and_tiem">
+                                                <span class="text-green">@{{discussion.user.username}}</span>
+                                                <span class="text-gray">{{discussion.discussion_date|time_diff}}</span>
+                                            </div>
+                                            <div class="like_and_comment">
+                                                <div>
+                                                    <img
+                                                    src="/static/images/icons/heartheart_discussion.svg"
+                                                    class="imglike"
+                                                             {%for u in user_likes%}  {%if u.discussion == discussion %} style="background-color: red;" {%else%} {%endif%} {%endfor%} data-id="{{discussion.discussion_id}}" />
+                                                    <span id="like-{{discussion.discussion_id}}">{{discussion.discussion_likes}}</span>
+                                                </div>
+                                                <div>
+                                                    <img src="/static/images/icons/chatcomment.svg" />
+                                                    <span>{{discussion.discussion_replies}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- discussions image -->
+                                    <div class="discussion--img">
+                                        <img
+                                            src="{{discussion.discussion_film.film_poster.url}}"
+                                            alt=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="discussion_container ml-xl">
+                            <div class="comment_count">{{discussion.discussion_replies}} Comments</div>
+                            {%for c in comments%}
+                            <div class="discussion_item">
+                                <!-- arrows -->
+                                <div class="arrow_container arrow_container_2">
+                                    <ion-icon
+                                        name="arrow-up-circle"
+                                        class="arrow-up-circle arrow-up-white"
+                                    ></ion-icon>
+                                    <span class="discussion_count">{{c.discussion_comment_likes}}</span>
+                                    <ion-icon
+                                        class="arrow-down-circle arrow-down-white"
+                                        name="arrow-down-circle"
+                                    ></ion-icon>
+                                </div>
+
+                                <!-- texts and image -->
+                                <!-- discussions text -->
+                                <div class="discussion--text">
+                                    <p class="text-white">
+                                        {{c.discussion_comment_content}}
+                                    </p>
+
+                                    <!-- discussion reyting  container-->
+                                    <div class="discussion__reyting">
+                                        <div class="tag_and_tiem">
+                                            <span class="text-green">@{{c.user.username}}</span>
+                                            <span class="text-gray">{{c.discussion_comment_date|time_diff}}</span>
+                                        </div>
+                                        <div class="like_and_comment">
+                                            <div>
+                                                <img src="/static/images/icons/heartheart_discussion.svg"
+                                                class="comment_like" {%for l in user_c_likes%} {%if l.discussion_comment == c %} style="background-color: red;" {%endif%} {%endfor%} data-value="{{c.discussion_comment_id}}" />
+                                                <span id="likes-{{c.discussion_comment_id}}">{{c.discussion_comment_likes}}</span>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {%endfor%}
+                           
+                            <form method="post"> {%csrf_token%}
+                                <div class="new_post_container">
+                                    <img src="/static/images/icons/Image.svg" alt="profil image" />
+                                    <div class="input_container">
+                                        <input type="text" placeholder="Add Comment" name="comment" required />
+                                        <ion-icon class="video_icon" name="videocam"></ion-icon>
+                                    </div>
+                                    
+                                    <button
+                                        class="play_button rounded-base flex_center text_white padding_xl"
+                                        id="post_comment" type="submit"
+                                    >
+                                        Post
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+                <!-- section 1 end -->
+            </main>
+            <!-- main end -->
+
+            <!-- footer start -->
+            <footer>
+                <div class="section_container footer_container">
+                    <div>
+                        <h4>
+                            Our platform is trusted by millions & features best updated movies all
+                            around the world.
+                        </h4>
+                        <div class="footer_nav_container">
+                            <nav>
+                                <!-- after iledə etmek olardı bu yolu seçdim -->
+                                <a href="">Home</a>
+                                <span>/</span>
+                                <a href="">Discover</a>
+                                <span>/</span>
+                                <a href="">Influence</a>
+                                <span>/</span>
+                                <a href="">Release</a>
+                            </nav>
+                            <div class="social_container">
+                                <img src="/static/images/social/icons8-instagram-30.png" />
+                                <img src="/static/images/social/icons8-facebook-30.png" />
+                                <img src="/static/images/social/icons8-twitter-squared-50.png" />
+                                <img src="/static/images/social/Google.svg" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="end">
+                        <div>
+                            <span>Privacy policy</span>
+                            <span>Term of service</span>
+                            <span>Language</span>
+                        </div>
+                        <div class="date">© 2023</div>
+                    </div>
+                </div>
+            </footer>
+            <!-- footer end -->
+        </div>
+
+        <!-- script -->
+         <script>
+            const likecomment = document.querySelectorAll('.comment_like')
+            likecomment.forEach(like=>{
+                like.addEventListener('click',async()=>{
+                    const id = like.getAttribute('data-value')
+                    const req = await fetch('/discussionCommentLike/'+id)
+                    const res = req.json()
+                    res.then(dat=>{
+                        const like_con = document.getElementById('likes-'+id)
+                        if(dat['status']=='success'){
+                            like.style = 'background-color:red;'
+                            like_con.innerText = parseInt(like_con.textContent)+1
+                        }
+                        else if(dat['status']='successdel'){
+                            like.style = 'background-color:none;'
+                            like_con.innerText = parseInt(like_con.textContent)-1 
+                        }
+                    })
+                })
+            })
+
+         </script>
+         <script>
+            const img = document.querySelectorAll('.imglike')
+            img.forEach(image=>{
+                image.addEventListener('click',async()=>{
+                    const sid = image.getAttribute('data-id')
+                    const reqs = await fetch('/likeDiscussion/'+sid)
+                    const ress = reqs.json()
+                    ress.then(data=>{
+                        const like_cons = document.getElementById('like-'+sid)
+                        if(data['status']=='success'){
+                            image.style = 'background-color:red;'
+                            like_cons.innerText = parseInt(like_cons.textContent)+1
+                        }
+                        else if(data['status']='successdel'){
+                            image.style = 'background-color:none;'
+                            like_cons.innerText = parseInt(like_cons.textContent)-1 
+                        }
+                    })
+                })
+            }) </script>
+        <script src="/static/app.js"></script>
+    </body>
+</html>

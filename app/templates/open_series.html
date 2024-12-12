@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+{%load index%}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{series.series_name}}</title>
+    <link rel="stylesheet" href="/static/index.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      href="https://assets.nflxext.com/us/ffe/siteui/common/icons/nficon2016.png"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/collection/components/icon/icon.min.css"
+    />
+    <!-- Ionicons JS -->
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <!-- header start -->
+      <header>
+        <!-- normal -->
+        <div class="section_container normal_navbar">
+          <a class="logo" href="/">
+            <img src="/static/images/icons/Component 1.png" alt="logo" />
+          </a>
+
+          <nav class="header--nav">
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/">Discover</a></li>
+              <li><a href="#">Movie Release</a></li>
+              <li><a href="/form">Forum</a></li>
+              <li><a href="#">About</a></li>
+            </ul>
+          </nav>
+
+          <div class="notif">
+            <div class="search_icon">
+              <img
+                class="search_icon"
+                src="/static/images/icons/search_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg"
+                alt="search"
+              />
+              <div class="search_input">
+                <input type="text" />
+              </div>
+            </div>
+
+            <div class="message_box">
+              <img src="/static/images/icons/bell.svg" />
+            </div>
+  
+            <div class="profil">
+              <img src="/static/images/icons/Image.svg" alt="profil image" />
+              
+              <a href="/logout" style="color:white;margin-left:15px">Logout</a>
+            </div>
+          </div>
+        </div>
+        <!-- mobil -->
+        <div class="section_container mobil_navbar">
+          <button class="mobile_back">
+            <img src="/static/images/icons/chevron-left.svg" />
+          </button>
+
+          <div class="mobil_container">
+            <img src="/static/images/icons/Icon copy.svg" alt="" />
+            <nav class="burger">
+              <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/">Discover</a></li>
+                <li><a href="#">Movie Release</a></li>
+                <li><a href="/form">Forum</a></li>
+                <li><a href="#">About</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </header>
+      <!-- header end -->
+
+      <!-- main start -->
+      <main>
+        <!-- header section 1  start-->
+        <section id="hero_section" style="background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 83%), url({{series.series_open_poster.url}}) no-repeat;">
+          <div class="details_container section_container">
+            <div class="movie--details--wrapper">
+              <button class="black_button">Series</button>
+
+              <div class="movie-details">
+                <div>
+                  <h2 class="movie--title">{{series.series_name}}</h2>
+                  <span>{{series.series_episode_count}} Episodes • {{series.release_date|date:'Y'}} • {{series.series_genre}} • {{series.series_category}} </span>
+                </div>
+                <div class="button_wrapper">
+                  <div>
+                   
+
+                    <button class="transparent_button {%if doeswatch%} bg-red {%endif%}" id="addwatchlist-main">
+                 
+                      <input type="text" hidden name="watchlist-series" id="watchlist-series" value="{{series.series_link}}">
+                      <img class="font-width-24" src="/static/images/icons/Icon.svg" />
+                      <span class="">Add Watchlist</span>
+                    </button>
+                  </div>
+
+                  <div class="buttons">
+                    
+                  
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!--  section 1  end-->
+
+        <!--  section 2 information  start-->
+        <section class="movie_information">
+          <div class="section_container">
+            <div class="info_container text_white">
+              <h4 class="info-title">Story Line</h4>
+              <p>
+               {{series.series_description}}
+              </p>
+            </div>
+
+            <div class="info_container">
+              <h4 class="info-title">Top Cast</h4>
+              <div class="actors_container">
+               {%for c in series.series_cast%}
+                <div class="actor--box">
+                  <img class="actor-img" src="{{c.photo_url}}" alt="" />
+
+                  <div class="actor-details">
+                    <div class="actor-name">{{c.name}}</div>
+                    <span>{{c.role}}</span>
+                  </div>
+                </div>
+               {%endfor%}
+              </div>
+
+              <!-- next actor button -->
+              <div class="new--actor_button">
+                <img src="/static/images/icons/Vector.svg" alt="next button" />
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- 2  section end-->
+
+        <!--  section 3 categories  start-->
+        <section>
+          <div>
+            <div class="section_items_container category_title">
+              <a class="active">Episodes</a>
+              
+            </div>
+
+            <div class="movie--wrapper">
+              <!-- movie 1 -->
+              <div class="film__container">
+                <div class="section_items_container">
+                  <div class="films__title">
+                    <div id="seasonname">{{series_seasons.0.series_seasons_name}} - {{series_seasons.0.series_season_episode_count}} Episodes</div>
+                    <select name="" id="series_season">
+                      {%for s in series_seasons%}
+                      <option value="{{s.series_seasons_id}}">{{s.series_seasons_name}}</option>
+                      {%endfor%}
+                    </select>
+                  </div>
+
+                  <div class="movie_box">
+                    <div class="films_container films_1" id="filmscontainer">
+                      {%for e in series_episodes%}
+                      <a href="/series/{{series.series_link}}/{{series_seasons.0.series_seasons_link}}/{{e.series_episode_link}}" target="_blank" style="color: white;">
+                        <div class="film__box">
+                          <img src="{{e.series_episodes_poster.url}}" alt="" />
+                          <div>
+                            <h3>{{e.series_episodes_name}}</h3>
+                            <p>
+                              {{e.series_episodes_description|decreaseword}}
+                            </p>
+                            
+                          </div>
+                        </div>
+                      </a>
+                      {%endfor%}
+   
+                      
+                    </div>
+
+                    <!-- absolute next button -->
+                    <div class="next_video_button series_next__button">
+                      <img src="/static/images/icons/Vector.svg" alt="next button" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- movie 2 -->
+              <div class="film__container border-none">
+                <div class="section_items_container">
+                  <div class="films__title">
+                    <div>Similar Series for you</div>
+                  </div>
+
+                  <div class="movie_box">
+                    <div class="films_container smillar__containers">
+                    {%for s in similar_series%}
+                      <a href="/series/{{s.series_link}}/" target="_blank" style="color: white;">
+                        <div class="simillar--movi_box">
+                          <img src="{{s.series_open_poster.url}}" alt="" />
+                          <div class="movie__details">
+                            <div class="name">{{s.series_name}}</div>
+                            <div class="reyting">
+                              <img
+                                src="/static/images/icons/star_18dp_FFFF55.svg"
+                                alt="star"
+                              />
+                              <span>{{s.series_imdb_rating}}</span>
+                              <div class="categore_movie">| {{s.series_category}} • Series</div>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    {%endfor%}
+                      
+                    </div>
+
+                    <!-- absolute button -->
+                    <div class="next_video_button next_video_button-2">
+                      <img src="/static/images/icons/Vector.svg" alt="next button" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- 2  section end-->
+      </main>
+      <!-- main end -->
+
+      <!-- footer start -->
+      <footer>
+        <div class="section_container footer_container">
+          <div>
+            <h4>
+              Our platform is trusted by millions & features best updated movies
+              all around the world.
+            </h4>
+            <div class="footer_nav_container">
+              <nav>
+                <!-- after iledə etmek olardı bu yolu seçdim -->
+                <a href="">Home</a>
+                <span>/</span>
+                <a href="">Discover</a>
+                <span>/</span>
+                <a href="">Influence</a>
+                <span>/</span>
+                <a href="">Release</a>
+              </nav>
+              <div class="social_container">
+                <img src="/static/images/social/icons8-instagram-30.png" />
+                <img src="/static/images/social/icons8-facebook-30.png" />
+                <img src="/static/images/social/icons8-twitter-squared-50.png" />
+                <img src="/static/images/social/Google.svg" />
+              </div>
+            </div>
+          </div>
+
+          <div class="end">
+            <div>
+              <span>Privacy policy</span>
+              <span>Term of service</span>
+              <span>Language</span>
+            </div>
+            <div class="date">© 2023</div>
+          </div>
+        </div>
+      </footer>
+      <!-- footer end -->
+    </div>
+
+    <!-- javascript code -->
+    <script src="/static/app.js"></script>
+    <script>
+      const seasons = document.getElementById('series_season')
+      const seasonname = document.getElementById('seasonname')
+      const episodescont = document.getElementById('filmscontainer')
+      seasons.addEventListener('change',async() =>{
+        const episodes = await fetch('/getEpisodes/'+'{{series.series_link}}'+'/'+seasons.value)
+        const response = episodes.json()
+        response.then(data=>{
+          seasonname.innerText = ''
+          seasonname.innerText = data['season_name'] + ' - ' + data['episode_count'] + ' Episodes' 
+         episodescont.innerHTML = ''
+         for(let i =0 ; i<data['episodes'].length;i++){
+           const a = document.createElement('a')
+           a.href = '/series/{{series.series_link}}/'+ data['season_link'] + '/' + data['episodes'][i]['series_episode_link']
+           a.style = 'color: white;'
+           const div1 = document.createElement('div')
+           div1.className = 'film__box'
+           const img = document.createElement('img')
+           img.src = '/media/'+data['episodes'][i]['series_episodes_poster']
+           const div2 = document.createElement('div')
+           const h = document.createElement('h3')
+           h.textContent = data['episodes'][i]['series_episodes_name']
+           const p = document.createElement('p')
+           p.textContent = data['episodes'][i]['series_episodes_description'].split(' ',10).join(' ') + ' ...'
+          div2.appendChild(h)
+          div2.appendChild(p)
+          div1.append(img)
+          div1.appendChild(div2)
+          a.appendChild(div1)
+          episodescont.appendChild(a)
+         }
+
+        })
+      })
+    </script>
+    <script>
+      const addwatchlistmain = document.getElementById('addwatchlist-main')
+      addwatchlistmain.addEventListener('click',async()=>{
+        const filmdata = document.getElementById('watchlist-film')
+        if(filmdata){
+          const response = await fetch('/addWatchListFilm/'+filmdata.value)
+          const res = response.json()
+          res.then(data=>{
+            if(data['status']=='success'){
+              addwatchlistmain.className ='transparent_button bg-red'
+            }
+            else if(data['status']=='successdel'){
+              addwatchlistmain.className ='transparent_button'
+            }
+          })
+        }
+        else{
+          const filmdata = document.getElementById('watchlist-series')
+          const response = await fetch('/addWatchListSeries/'+filmdata.value)
+          const res = response.json()
+          res.then(data=>{
+            if(data['status']=='success'){
+              addwatchlistmain.className ='transparent_button bg-red'
+            }
+            else if(data['status']=='successdel'){
+              addwatchlistmain.className ='transparent_button'
+            }
+          })
+        }
+      })
+    </script>
+    <script src="/static/js/series.js"></script>
+  </body>
+</html>

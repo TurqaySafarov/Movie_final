@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Video Player</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #141414;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Header (Logo) */
+        .header {
+            margin-bottom: 20px;
+        }
+
+        .header img {
+            height: 50px;
+        }
+
+        /* Video Player */
+        .video-container {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+            outline: none;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background-color: #333;
+            border-radius: 5px;
+            margin-top: 10px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #e50914;
+            width: 0;
+            border-radius: 5px;
+        }
+
+        /* Duration Info */
+        .duration-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        /* Controls */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .controls button {
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: white;
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .controls button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .controls button i {
+            margin-right: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header (Logo) -->
+    <div class="header">
+       <a href="/">
+        <img src="/static/images/icons/Component 1.png" alt="Logo">
+       </a>
+    </div>
+
+    <!-- Video Player -->
+    <div class="video-container">
+        <video id="movie">
+            <source id="" src="{{movie.film_video.url}}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <!-- Progress Bar -->
+        <div class="progress-container" id="progress-container" onclick="seek(event)">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <!-- Duration Info -->
+        <div class="duration-info">
+            <span id="played-time">00:00</span>
+            <span id="remaining-time">00:00</span>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button onclick="rewind()">
+            <i>&#8634;</i> -10s
+        </button>
+        <button onclick="playPause()" id="play-pause">
+            <i>&#9658;</i> Play
+        </button>
+        <button onclick="fastForward()">
+            +10s <i>&#9654;&#9654;</i>
+        </button>
+        <button onclick="toggleFullscreen()">&#x26F6;</button>
+    </div>
+
+    <script>
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 's' || e.key === 'p' || e.key === 'i' || e.key === 'u')) {
+                e.preventDefault();
+            }
+        });
+        
+        const video = document.getElementById('movie');
+        const progressBar = document.getElementById('progress-bar');
+        const progressContainer = document.getElementById('progress-container');
+        const playedTime = document.getElementById('played-time');
+        const remainingTime = document.getElementById('remaining-time');
+        const playPauseBtn = document.getElementById('play-pause');
+
+        let isPlaying = false;
+        window.onload = ()=>{
+            video.currentTime = {{watchingdata.continue_watching_time.seconds}}
+        }
+        // Format time in MM:SS
+        function formatTimes(time) {
+            const minutes = Math.floor(time / 60);
+            const seconds = Math.floor(time % 60);
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Update progress bar and duration info as video plays
+        video.addEventListener('timeupdate', updateProgress);
+
+        function updateProgress() {
+            const percentage = (video.currentTime / video.duration) * 100;
+            progressBar.style.width = `${percentage}%`;
+
+            // Update played and remaining time
+            playedTime.textContent = formatTimes(video.currentTime);
+            remainingTime.textContent = formatTimes(video.duration - video.currentTime);
+        }
+
+        // Play or Pause the video
+        function playPause() {
+            if (isPlaying) {
+                video.pause();
+                isPlaying = false;
+                playPauseBtn.innerHTML = '<i>&#9658;</i> Play';
+            } else {
+                video.play();
+                isPlaying = true;
+                playPauseBtn.innerHTML = '<i>&#10074;&#10074;</i> Pause';
+            }
+        }
+
+        // Rewind 10 seconds
+        function rewind() {
+            video.currentTime -= 10;
+        }
+
+        // Fast forward 10 seconds
+        function fastForward() {
+            video.currentTime += 10;
+        }
+
+        // Seek video position by clicking on the progress bar
+        function seek(event) {
+            const width = progressContainer.clientWidth;
+            const clickX = event.offsetX;
+            const duration = video.duration;
+
+            video.currentTime = (clickX / width) * duration;
+        }
+    </script>
+    <script>
+        function toggleFullscreen() {
+            const video = document.getElementById('movie');
+
+            // Check if the video is already in fullscreen
+            if (!document.fullscreenElement) {
+                // Request fullscreen
+                if (video.requestFullscreen) {
+                    video.requestFullscreen();
+                } else if (video.mozRequestFullScreen) { // Firefox
+                    video.mozRequestFullScreen();
+                } else if (video.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                    video.webkitRequestFullscreen();
+                } else if (video.msRequestFullscreen) { // IE/Edge
+                    video.msRequestFullscreen();
+                }
+            } else {
+                // Exit fullscreen
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) { // Firefox
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) { // Chrome, Safari, Opera
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { // IE/Edge
+                    document.msExitFullscreen();
+                }
+            }
+        }
+    </script>
+    <script>
+        let intervalId;
+        function pad(number) {
+            return number.toString().padStart(2, '0');
+        }
+        function formatTime() {
+            const seconds1 = video.currentTime;
+            const hours1 = Math.floor(seconds1 / 3600);
+            const minutes1 = Math.floor((seconds1 % 3600) / 60);
+            const secs1 = Math.floor(seconds1 % 60);
+        
+            // Format to hh:mm:ss
+            return `${pad(hours1)}:${pad(minutes1)}:${pad(secs1)}`;
+        }
+        // Function to perform the GET request
+async function fetchData() {
+    try {
+        // Replace 'https://api.example.com/data' with your API endpoint
+        const response = await fetch('/saveWatchTimeFilm/'+'{{movie.film_link}}'+'/'+formatTime());
+
+        // Check if the response is ok (status code 200-299)
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        // Parse JSON data (or handle other response types as needed)
+        const data = await response.json();
+        console.log("Fetched data:", data);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        console.error('Error:', error);
+        clearInterval(intervalId); // Stop the interval on error
+        console.log("Interval stopped due to error.");
+    }
+}
+
+// Set up the interval to call fetchData every 5 seconds (5000 milliseconds)
+intervalId = setInterval(fetchData, 1500);
+
+    </script>
+</body>
+</html>
+
+
+
+
